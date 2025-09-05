@@ -6,7 +6,7 @@ $db = require __DIR__ . '/db.php';
 $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => ['log', 'app\components\SettingsBootstrap'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
@@ -22,6 +22,16 @@ $config = [
         'user' => [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
+            'loginUrl' => ['/site/login'],
+        ],
+        'view' => [
+            'theme' => [
+                'basePath' => '@app/views',
+                'baseUrl' => '@web/views',
+                'pathMap' => [
+                    '@app/views' => '@app/views',
+                ],
+            ],
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',

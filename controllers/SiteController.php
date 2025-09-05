@@ -12,6 +12,7 @@ use app\models\ContactForm;
 
 class SiteController extends Controller
 {
+    public $layout = 'adminlte';
     /**
      * {@inheritdoc}
      */
@@ -74,6 +75,8 @@ class SiteController extends Controller
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
+
+        $this->layout = 'main'; // ใช้ layout แบบธรรมดาสำหรับ login
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {

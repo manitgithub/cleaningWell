@@ -1,0 +1,162 @@
+/* Custom CSS for CleaningWell AdminLTE Theme */
+
+/* Breadcrumb improvements */
+.breadcrumb {
+    background: transparent;
+    border-radius: 5px;
+    padding: 8px 15px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    border: 1px solid #e3e6f0;
+}
+
+.breadcrumb-item {
+    font-weight: 500;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    content: "›";
+    color: #6c757d;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 0 8px;
+}
+
+.breadcrumb-item a {
+    color: #495057;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.breadcrumb-item a:hover {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.breadcrumb-item.active {
+    color: #007bff;
+    font-weight: 600;
+}
+
+.breadcrumb i {
+    margin-right: 5px;
+    font-size: 13px;
+}
+
+/* Responsive Breadcrumb */
+@media (max-width: 768px) {
+    .breadcrumb {
+        font-size: 12px;
+        padding: 6px 10px;
+        flex-wrap: wrap;
+    }
+    
+    .breadcrumb-item {
+        max-width: 120px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    .breadcrumb i {
+        margin-right: 3px;
+        font-size: 11px;
+    }
+    
+    .breadcrumb-item + .breadcrumb-item::before {
+        font-size: 14px;
+        margin: 0 3px;
+    }
+}
+
+@media (max-width: 576px) {
+    .content-header .breadcrumb {
+        float: none !important;
+        margin-top: 10px;
+        width: 100%;
+    }
+    
+    .breadcrumb-item {
+        max-width: 100px;
+    }
+}
+
+/* Content header improvements */
+.content-header {
+    padding: 15px 0;
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 20px;
+}
+
+.content-header h1 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 0;
+    color: #343a40;
+}
+
+/* Brand link adjustments */
+.brand-link {
+    display: flex;
+    align-items: center;
+}
+
+/* User panel adjustments */
+.user-panel .image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.1rem;
+    height: 2.1rem;
+}
+
+/* Card improvements */
+.info-box {
+    box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+    border-radius: .25rem;
+    background-color: #fff;
+    display: flex;
+    margin-bottom: 1rem;
+    min-height: 80px;
+    padding: .5rem;
+    position: relative;
+    width: 100%;
+}
+
+/* Timeline improvements */
+.timeline > div > .timeline-item {
+    box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+}
+
+/* Login page customization */
+.login-page {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.login-box {
+    width: 360px;
+    margin: 7% auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+    .content-wrapper, .right-side, .main-footer {
+        margin-left: 0;
+    }
+    
+    .main-sidebar {
+        left: -250px;
+    }
+    
+    .sidebar-open .main-sidebar {
+        left: 0;
+    }
+    
+    .breadcrumb-item {
+        font-size: 12px;
+    }
+    
+    .content-header h1 {
+        font-size: 1.5rem;
+    }
+}

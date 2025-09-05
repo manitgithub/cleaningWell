@@ -8,13 +8,13 @@
 use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Html;
 
-$this->title = 'Login';
+$this->title = 'เข้าสู่ระบบ';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-login">
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>Please fill out the following fields to login:</p>
+    <p>กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบ:</p>
 
     <div class="row">
         <div class="col-lg-5">
@@ -39,15 +39,17 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <div class="form-group">
                 <div>
-                    <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+                    <?= Html::submitButton('เข้าสู่ระบบ', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
                 </div>
             </div>
 
             <?php ActiveForm::end(); ?>
 
             <div style="color:#999;">
-                You may login with <strong>admin/admin</strong> or <strong>demo/demo</strong>.<br>
-                To modify the username/password, please check out the code <code>app\models\User::$users</code>.
+                ข้อมูลสำหรับทดสอบ:<br>
+                <strong>admin / admin123</strong> (ผู้ดูแลระบบ)<br>
+                <strong>housekeeper1 / housekeeper123</strong> (แม่บ้าน)
+            </div>
             </div>
 
         </div>

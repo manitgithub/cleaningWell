@@ -36,6 +36,18 @@ class LoginForm extends Model
     }
 
     /**
+     * @return array customized attribute labels
+     */
+    public function attributeLabels()
+    {
+        return [
+            'username' => 'ชื่อผู้ใช้',
+            'password' => 'รหัสผ่าน',
+            'rememberMe' => 'จดจำการเข้าสู่ระบบ',
+        ];
+    }
+
+    /**
      * Validates the password.
      * This method serves as the inline validation for password.
      *
@@ -48,7 +60,7 @@ class LoginForm extends Model
             $user = $this->getUser();
 
             if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, 'Incorrect username or password.');
+                $this->addError($attribute, 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
             }
         }
     }
@@ -60,7 +72,14 @@ class LoginForm extends Model
     public function login()
     {
         if ($this->validate()) {
-            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
+            $user = $this->getUser();
+            $result = Yii::$app->user->login($user, $this->rememberMe ? 3600*24*30 : 0);
+            
+            if ($result) {
+                $user->updateLastLogin();
+            }
+            
+            return $result;
         }
         return false;
     }
