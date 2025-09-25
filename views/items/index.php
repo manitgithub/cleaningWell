@@ -44,6 +44,15 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         
                         [
+                            'attribute' => 'description',
+                            'label' => 'รายละเอียด',
+                            'format' => 'text',
+                            'value' => function($model) {
+                                return $model->description ? \yii\helpers\StringHelper::truncate($model->description, 50) : '-';
+                            },
+                        ],
+                        
+                        [
                             'attribute' => 'unit',
                             'label' => 'หน่วย',
                             'format' => 'text',
@@ -51,33 +60,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         
                         [
-                            'attribute' => 'base_price',
+                            'attribute' => 'unit_price',
                             'label' => 'ราคาหน่วย',
                             'format' => 'text',
                             'value' => function($model) {
                                 return $model->getFormattedPrice();
                             },
                             'contentOptions' => ['style' => 'width: 120px; text-align: right;'],
-                        ],
-                        
-                        [
-                            'attribute' => 'vat_applicable',
-                            'label' => 'VAT',
-                            'format' => 'raw',
-                            'value' => function($model) {
-                                return $model->getVatBadge();
-                            },
-                            'contentOptions' => ['style' => 'width: 80px; text-align: center;'],
-                        ],
-                        
-                        [
-                            'attribute' => 'wht_default',
-                            'label' => 'หัก ณ ที่จ่าย (%)',
-                            'format' => 'text',
-                            'value' => function($model) {
-                                return number_format($model->wht_default, 2) . '%';
-                            },
-                            'contentOptions' => ['style' => 'width: 100px; text-align: center;'],
                         ],
                         
                         [

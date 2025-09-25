@@ -11,10 +11,9 @@ use yii\db\Expression;
  *
  * @property int $id
  * @property string $name
+ * @property string $description
  * @property string $unit
- * @property string $base_price
- * @property int $vat_applicable
- * @property string $wht_default
+ * @property string $unit_price
  * @property int $is_active
  * @property string $created_at
  * @property string $updated_at
@@ -51,11 +50,11 @@ class Item extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
-            [['base_price', 'wht_default'], 'number'],
-            [['vat_applicable', 'is_active'], 'integer'],
+            [['unit_price'], 'number'],
+            [['is_active'], 'integer'],
             [['name'], 'string', 'max' => 255],
+            [['description'], 'string'],
             [['unit'], 'string', 'max' => 32],
-            ['vat_applicable', 'in', 'range' => [0, 1]],
             ['is_active', 'in', 'range' => [0, 1]],
         ];
     }
@@ -68,10 +67,9 @@ class Item extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'ชื่อสินค้า/บริการ',
+            'description' => 'รายละเอียด',
             'unit' => 'หน่วย',
-            'base_price' => 'ราคาหน่วย',
-            'vat_applicable' => 'คิด VAT',
-            'wht_default' => 'หัก ณ ที่จ่าย (%)',
+            'unit_price' => 'ราคาหน่วย',
             'is_active' => 'สถานะ',
             'created_at' => 'วันที่สร้าง',
             'updated_at' => 'วันที่แก้ไข',
@@ -88,22 +86,14 @@ class Item extends \yii\db\ActiveRecord
             : '<span class="badge badge-secondary">Inactive</span>';
     }
 
-    /**
-     * Get VAT applicable badge
-     */
-    public function getVatBadge()
-    {
-        return $this->vat_applicable == 1 
-            ? '<span class="badge badge-info">VAT</span>' 
-            : '<span class="badge badge-light">No VAT</span>';
-    }
+
 
     /**
      * Get formatted price
      */
     public function getFormattedPrice()
     {
-        return number_format($this->base_price, 2) . ' บาท';
+        return number_format($this->unit_price, 2) . ' บาท';
     }
 
     /**
@@ -117,16 +107,7 @@ class Item extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * Get VAT options for dropdown
-     */
-    public static function getVatOptions()
-    {
-        return [
-            1 => 'คิด VAT',
-            0 => 'ไม่คิด VAT',
-        ];
-    }
+
 
     /**
      * Get unit options for dropdown
@@ -157,14 +138,11 @@ class Item extends \yii\db\ActiveRecord
             if ($insert && !isset($this->is_active)) {
                 $this->is_active = 1;
             }
-            if ($insert && !isset($this->vat_applicable)) {
-                $this->vat_applicable = 1;
-            }
-            if ($insert && !isset($this->wht_default)) {
-                $this->wht_default = 0;
-            }
             if ($insert && empty($this->unit)) {
                 $this->unit = 'หน่วย';
+            }
+            if ($insert && empty($this->unit_price)) {
+                $this->unit_price = 0;
             }
             return true;
         }
