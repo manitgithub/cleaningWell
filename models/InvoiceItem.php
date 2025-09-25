@@ -5,10 +5,10 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "quotation_items".
+ * This is the model class for table "invoice_items".
  *
  * @property int $id
- * @property int $quotation_id
+ * @property int $invoice_id
  * @property int $item_id
  * @property string $description
  * @property float $qty
@@ -17,24 +17,24 @@ use Yii;
  * @property float $line_total
  * @property int $sort_order
  *
- * @property Quotation $quotation
+ * @property Invoice $invoice
  * @property Item $item
  */
-class QuotationItem extends \yii\db\ActiveRecord
+class InvoiceItem extends \yii\db\ActiveRecord
 {
     public static function tableName()
     {
-        return 'quotation_items';
+        return 'invoice_items';
     }
 
     public function rules()
     {
         return [
-            [['quotation_id', 'description', 'qty', 'unit_price', 'line_total'], 'required'],
-            [['quotation_id', 'item_id', 'sort_order'], 'integer'],
+            [['invoice_id', 'description', 'qty', 'unit_price', 'line_total'], 'required'],
+            [['invoice_id', 'item_id', 'sort_order'], 'integer'],
             [['description'], 'string'],
             [['qty', 'unit_price', 'line_discount', 'line_total'], 'number'],
-            [['quotation_id'], 'exist', 'skipOnError' => true, 'targetClass' => Quotation::class, 'targetAttribute' => ['quotation_id' => 'id']],
+            [['invoice_id'], 'exist', 'skipOnError' => true, 'targetClass' => Invoice::class, 'targetAttribute' => ['invoice_id' => 'id']],
             [['item_id'], 'exist', 'skipOnError' => true, 'targetClass' => Item::class, 'targetAttribute' => ['item_id' => 'id']],
         ];
     }
@@ -43,7 +43,7 @@ class QuotationItem extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'quotation_id' => 'ใบเสนอราคา',
+            'invoice_id' => 'ใบแจ้งหนี้',
             'item_id' => 'สินค้า/บริการ',
             'description' => 'รายละเอียด',
             'qty' => 'จำนวน',
@@ -54,9 +54,9 @@ class QuotationItem extends \yii\db\ActiveRecord
         ];
     }
 
-    public function getQuotation()
+    public function getInvoice()
     {
-        return $this->hasOne(Quotation::class, ['id' => 'quotation_id']);
+        return $this->hasOne(Invoice::class, ['id' => 'invoice_id']);
     }
 
     public function getItem()

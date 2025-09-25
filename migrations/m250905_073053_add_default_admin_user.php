@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m250904_073053_add_default_admin_user extends Migration
+class m250905_073053_add_default_admin_user extends Migration
 {
     /**
      * {@inheritdoc}

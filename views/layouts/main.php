@@ -199,6 +199,31 @@ $this->beginPage() ?>
                         </ul>
                     </li>
 
+                    <!-- Documents & Finance -->
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-file-invoice-dollar"></i>
+                            <p>
+                                เอกสาร & การเงิน
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <?= Html::a('<i class="far fa-circle nav-icon"></i><p>ใบเสนอราคา</p>', ['/quotations/index'], ['class' => 'nav-link']) ?>
+                            </li>
+                            <li class="nav-item">
+                                <?= Html::a('<i class="far fa-circle nav-icon"></i><p>ใบแจ้งหนี้</p>', ['/invoices/index'], ['class' => 'nav-link']) ?>
+                            </li>
+                            <li class="nav-item">
+                                <?= Html::a('<i class="far fa-circle nav-icon"></i><p>ใบเสร็จรับเงิน</p>', ['/receipts/index'], ['class' => 'nav-link']) ?>
+                            </li>
+                            <li class="nav-item">
+                                <?= Html::a('<i class="far fa-circle nav-icon"></i><p>ค่าใช้จ่าย</p>', ['/expenses/index'], ['class' => 'nav-link']) ?>
+                            </li>
+                        </ul>
+                    </li>
+
                     <!-- Reports -->
                     <li class="nav-item">
                         <a href="#" class="nav-link">

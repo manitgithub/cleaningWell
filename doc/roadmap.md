@@ -39,8 +39,8 @@
 
 ---
 
-## Phase 4: Documents & Finance
-- [ ] Quotations (CRUD, Dynamic items, Export PDF)
+## Phase 4: Documents & Finance 🚧
+- [x] Quotations (CRUD, Dynamic items, Export PDF) - Models, Controller, Views สร้างแล้ว
 - [ ] Invoices (แปลงจาก Quotation, Update status)
 - [ ] Receipts (บันทึกการรับชำระ, Update invoice balance)
 - [ ] Expenses

@@ -83,10 +83,9 @@ class m250904_140000_full_init extends Migration
         $this->createTable('{{%items}}', [
             'id' => $this->bigPrimaryKey(),
             'name' => $this->string(255)->notNull(),
+            'description' => $this->text(),
             'unit' => $this->string(32)->notNull()->defaultValue('หน่วย'),
-            'base_price' => $this->decimal(12,2)->notNull()->defaultValue(0),
-            'vat_applicable' => $this->tinyInteger()->notNull()->defaultValue(1),
-            'wht_default' => $this->decimal(5,2)->notNull()->defaultValue(0),
+            'unit_price' => $this->decimal(12,2)->notNull()->defaultValue(0),
             'is_active' => $this->tinyInteger()->notNull()->defaultValue(1),
             'created_at' => $this->dateTime()->notNull(),
             'updated_at' => $this->dateTime()->notNull(),
@@ -107,7 +106,9 @@ class m250904_140000_full_init extends Migration
             'project_id' => $this->bigInteger()->notNull(),
             'customer_id' => $this->bigInteger()->notNull(),
             'date' => $this->date()->notNull(),
-            'valid_until' => $this->date(),
+            'expire_date' => $this->date(),
+            'subject' => $this->string(255),
+            'notes' => $this->text(),
             'sub_total' => $this->decimal(12,2)->notNull()->defaultValue(0),
             'discount_total' => $this->decimal(12,2)->notNull()->defaultValue(0),
             'vat_rate' => $this->decimal(5,2)->notNull()->defaultValue(7.00),
@@ -115,7 +116,6 @@ class m250904_140000_full_init extends Migration
             'wht_rate' => $this->decimal(5,2)->notNull()->defaultValue(0),
             'wht_amount' => $this->decimal(12,2)->notNull()->defaultValue(0),
             'grand_total' => $this->decimal(12,2)->notNull()->defaultValue(0),
-            'payment_terms' => $this->string(255),
             'status' => $this->tinyInteger()->notNull()->defaultValue(0),
             'created_at' => $this->dateTime()->notNull(),
             'updated_at' => $this->dateTime()->notNull(),
@@ -141,7 +141,8 @@ class m250904_140000_full_init extends Migration
             'quotation_id' => $this->bigInteger(),
             'date' => $this->date()->notNull(),
             'due_date' => $this->date(),
-            'credit_days' => $this->integer()->defaultValue(0),
+            'subject' => $this->string(255),
+            'notes' => $this->text(),
             'sub_total' => $this->decimal(12,2)->notNull()->defaultValue(0),
             'discount_total' => $this->decimal(12,2)->notNull()->defaultValue(0),
             'vat_rate' => $this->decimal(5,2)->notNull()->defaultValue(7.00),
@@ -149,6 +150,8 @@ class m250904_140000_full_init extends Migration
             'wht_rate' => $this->decimal(5,2)->notNull()->defaultValue(0),
             'wht_amount' => $this->decimal(12,2)->notNull()->defaultValue(0),
             'grand_total' => $this->decimal(12,2)->notNull()->defaultValue(0),
+            'paid_amount' => $this->decimal(12,2)->notNull()->defaultValue(0),
+            'balance' => $this->decimal(12,2)->notNull()->defaultValue(0),
             'status' => $this->tinyInteger()->notNull()->defaultValue(0),
             'created_at' => $this->dateTime()->notNull(),
             'updated_at' => $this->dateTime()->notNull(),
@@ -193,6 +196,21 @@ class m250904_140000_full_init extends Migration
             'created_at' => $this->dateTime()->notNull(),
             'updated_at' => $this->dateTime()->notNull(),
         ], $this->tableOptions);
+
+        // Add Foreign Keys for Finance tables
+        $this->addForeignKey('fk_quotations_project', '{{%quotations}}', 'project_id', '{{%projects}}', 'id', 'RESTRICT');
+        $this->addForeignKey('fk_quotations_customer', '{{%quotations}}', 'customer_id', '{{%customers}}', 'id', 'RESTRICT');
+        $this->addForeignKey('fk_quotation_items_quotation', '{{%quotation_items}}', 'quotation_id', '{{%quotations}}', 'id', 'CASCADE');
+        $this->addForeignKey('fk_quotation_items_item', '{{%quotation_items}}', 'item_id', '{{%items}}', 'id', 'RESTRICT');
+        
+        $this->addForeignKey('fk_invoices_project', '{{%invoices}}', 'project_id', '{{%projects}}', 'id', 'RESTRICT');
+        $this->addForeignKey('fk_invoices_customer', '{{%invoices}}', 'customer_id', '{{%customers}}', 'id', 'RESTRICT');
+        $this->addForeignKey('fk_invoices_quotation', '{{%invoices}}', 'quotation_id', '{{%quotations}}', 'id', 'RESTRICT');
+        $this->addForeignKey('fk_invoice_items_invoice', '{{%invoice_items}}', 'invoice_id', '{{%invoices}}', 'id', 'CASCADE');
+        $this->addForeignKey('fk_invoice_items_item', '{{%invoice_items}}', 'item_id', '{{%items}}', 'id', 'RESTRICT');
+        
+        $this->addForeignKey('fk_receipts_invoice', '{{%receipts}}', 'invoice_id', '{{%invoices}}', 'id', 'RESTRICT');
+        $this->addForeignKey('fk_expenses_project', '{{%expenses}}', 'project_id', '{{%projects}}', 'id', 'RESTRICT');
 
         /** ================= HOUSEKEEPER ================= */
         $this->createTable('{{%service_points}}', [
@@ -414,35 +432,35 @@ SQL);
         $this->execute('DROP VIEW IF EXISTS v_ar_aging');
         $this->execute('DROP VIEW IF EXISTS v_cash_ledger');
 
-        $this->dropTable('{{%pay_transactions}}');
-        $this->dropTable('{{%payslips}}');
-        $this->dropTable('{{%payroll_items}}');
-        $this->dropTable('{{%payroll_runs}}');
-        $this->dropTable('{{%pay_periods}}');
-        $this->dropTable('{{%deduction_policies}}');
-        $this->dropTable('{{%allowance_policies}}');
-        $this->dropTable('{{%ot_policies}}');
-        $this->dropTable('{{%wage_profiles}}');
+        $this->execute('DROP TABLE IF EXISTS {{%pay_transactions}}');
+        $this->execute('DROP TABLE IF EXISTS {{%payslips}}');
+        $this->execute('DROP TABLE IF EXISTS {{%payroll_items}}');
+        $this->execute('DROP TABLE IF EXISTS {{%payroll_runs}}');
+        $this->execute('DROP TABLE IF EXISTS {{%pay_periods}}');
+        $this->execute('DROP TABLE IF EXISTS {{%deduction_policies}}');
+        $this->execute('DROP TABLE IF EXISTS {{%allowance_policies}}');
+        $this->execute('DROP TABLE IF EXISTS {{%ot_policies}}');
+        $this->execute('DROP TABLE IF EXISTS {{%wage_profiles}}');
 
-        $this->dropTable('{{%attendance_logs}}');
-        $this->dropTable('{{%attendances}}');
-        $this->dropTable('{{%assignments}}');
-        $this->dropTable('{{%shifts}}');
-        $this->dropTable('{{%service_points}}');
+        $this->execute('DROP TABLE IF EXISTS {{%attendance_logs}}');
+        $this->execute('DROP TABLE IF EXISTS {{%attendances}}');
+        $this->execute('DROP TABLE IF EXISTS {{%assignments}}');
+        $this->execute('DROP TABLE IF EXISTS {{%shifts}}');
+        $this->execute('DROP TABLE IF EXISTS {{%service_points}}');
 
-        $this->dropTable('{{%expenses}}');
-        $this->dropTable('{{%receipts}}');
-        $this->dropTable('{{%invoice_items}}');
-        $this->dropTable('{{%invoices}}');
-        $this->dropTable('{{%quotation_items}}');
-        $this->dropTable('{{%quotations}}');
+        $this->execute('DROP TABLE IF EXISTS {{%expenses}}');
+        $this->execute('DROP TABLE IF EXISTS {{%receipts}}');
+        $this->execute('DROP TABLE IF EXISTS {{%invoice_items}}');
+        $this->execute('DROP TABLE IF EXISTS {{%invoices}}');
+        $this->execute('DROP TABLE IF EXISTS {{%quotation_items}}');
+        $this->execute('DROP TABLE IF EXISTS {{%quotations}}');
 
-        $this->dropTable('{{%doc_counters}}');
-        $this->dropTable('{{%items}}');
-        $this->dropTable('{{%projects}}');
-        $this->dropTable('{{%customers}}');
-        $this->dropTable('{{%settings}}');
-        $this->dropTable('{{%customer_types}}');
-        $this->dropTable('{{%users}}');
+        $this->execute('DROP TABLE IF EXISTS {{%doc_counters}}');
+        $this->execute('DROP TABLE IF EXISTS {{%items}}');
+        $this->execute('DROP TABLE IF EXISTS {{%projects}}');
+        $this->execute('DROP TABLE IF EXISTS {{%customers}}');
+        $this->execute('DROP TABLE IF EXISTS {{%settings}}');
+        $this->execute('DROP TABLE IF EXISTS {{%customer_types}}');
+        $this->execute('DROP TABLE IF EXISTS {{%users}}');
     }
 }
